@@ -15,19 +15,48 @@ const BookList = ({ user }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterIntent, setFilterIntent] = useState('all');
   const [filterCondition, setFilterCondition] = useState('all');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
     const q = query(
       collection(db, 'books'),
       where('status', '==', 'available'),
       orderBy('createdAt', 'desc'),
     );
-    const unsub = onSnapshot(q, (snap) => {
-      const next = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      setBooks(next);
-    });
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        const next = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setBooks(next);
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Firestore error:', error);
+        setLoading(false);
+        // If index error, fetch without orderBy as fallback
+        if (error.code === 'failed-precondition' || error.message.includes('index')) {
+          const fallbackQ = query(
+            collection(db, 'books'),
+            where('status', '==', 'available')
+          );
+          const fallbackUnsub = onSnapshot(fallbackQ, (snap) => {
+            const next = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+            // Sort in memory
+            next.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+            setBooks(next);
+          });
+          return fallbackUnsub;
+        }
+      }
+    );
     return unsub;
-  }, []);
+  }, [user]);
 
   // Filter & search logic
   const filteredBooks = books.filter((book) => {
@@ -41,6 +70,16 @@ const BookList = ({ user }) => {
     
     return matchesSearch && matchesIntent && matchesCondition;
   });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-dark flex items-center justify-center">
+        <div className="glass-card p-8 rounded-xl">
+          <p className="text-white font-semibold">Loading books…</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!books.length) {
     return (
