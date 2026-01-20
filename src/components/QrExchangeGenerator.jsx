@@ -27,13 +27,13 @@ const QrExchangeGenerator = ({ book, user }) => {
           onClick={() => setOpen(false)}
         >
           <div
-            className="glass-card max-w-sm w-full p-8 rounded-2xl animate-scale-in"
+            className="glass-card max-w-sm w-full p-8 rounded-2xl animate-scale-in text-slate-900"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
           >
-            <h2 className="text-2xl font-bold text-white mb-2 animate-slide-down">Exchange QR Code</h2>
-            <p className="text-gray-400 text-sm mb-6 animate-fade-in-delay-1">
+            <h2 className="text-2xl font-bold text-slate-900 mb-2 animate-slide-down">Exchange QR Code</h2>
+            <p className="text-slate-600 text-sm mb-6 animate-fade-in-delay-1">
               Share this code with the other student. They'll scan it to confirm the exchange.
             </p>
             
@@ -43,13 +43,13 @@ const QrExchangeGenerator = ({ book, user }) => {
             </div>
 
             {/* Book Details */}
-            <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-lg p-3 mb-6 animate-fade-in-delay-3 transition-smooth hover:bg-indigo-500/20 hover:border-indigo-500/40">
-              <p className="text-xs text-indigo-300 font-semibold mb-1">BOOK DETAILS ENCODED:</p>
-              <p className="text-xs text-indigo-400">{book.title}</p>
+            <div className="bg-indigo-500/10 border border-indigo-200 rounded-lg p-3 mb-6 animate-fade-in-delay-3 transition-smooth hover:bg-indigo-500/20 hover:border-indigo-300">
+              <p className="text-xs text-indigo-700 font-semibold mb-1">BOOK DETAILS ENCODED:</p>
+              <p className="text-xs text-indigo-600">{book.title}</p>
             </div>
 
             {/* Info Message */}
-            <p className="text-xs text-gray-500 text-center mb-6 animate-fade-in-delay-3">
+            <p className="text-xs text-slate-500 text-center mb-6 animate-fade-in-delay-3">
               ✓ Secure • Only contains book ID • Close after exchange
             </p>
 
