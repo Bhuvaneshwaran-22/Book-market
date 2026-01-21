@@ -12,15 +12,16 @@ const QrExchangeScanner = ({ user, showToast }) => {
   const [bookDetails, setBookDetails] = useState(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [payload, setPayload] = useState(null);
+  const [isSuccessful, setIsSuccessful] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (severity === 'success') {
-      const timer = setTimeout(() => navigate('/books'), 1200);
+    if (isSuccessful) {
+      const timer = setTimeout(() => navigate('/books'), 2500);
       return () => clearTimeout(timer);
     }
     return undefined;
-  }, [severity, navigate]);
+  }, [isSuccessful, navigate]);
 
   const handleDecode = async (value) => {
     if (busy || paused) return;
@@ -107,9 +108,7 @@ const QrExchangeScanner = ({ user, showToast }) => {
       setStatus('✓ Exchange verified successfully. Redirecting…');
       setPaused(true);
       showToast?.('Exchange verified. Great job!');
-      
-      const timer = setTimeout(() => navigate('/books'), 1200);
-      return () => clearTimeout(timer);
+      setIsSuccessful(true);
     } catch (err) {
       setSeverity('error');
       setStatus(err.message || 'Could not process QR code.');
@@ -233,7 +232,7 @@ const QrExchangeScanner = ({ user, showToast }) => {
 
         {/* Action Buttons */}
         <div className="space-y-3 animate-fade-in-delay-1">
-          {showConfirm ? (
+          {showConfirm && !isSuccessful ? (
             <>
               <button
                 onClick={confirmExchange}
@@ -250,6 +249,13 @@ const QrExchangeScanner = ({ user, showToast }) => {
                 ← Scan Again
               </button>
             </>
+          ) : isSuccessful ? (
+            <button
+              onClick={() => navigate('/books')}
+              className="w-full btn-primary py-3 rounded-lg font-semibold hover:scale-105 active:scale-95 transition-transform"
+            >
+              → Back to Books
+            </button>
           ) : (
             <button
               onClick={() => navigate('/books')}
