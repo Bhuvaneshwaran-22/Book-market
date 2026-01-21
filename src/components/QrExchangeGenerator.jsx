@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import QRCode from 'qrcode.react';
 
-// Shows QR code for owner to confirm a physical handoff.
 const QrExchangeGenerator = ({ book, user }) => {
   const [open, setOpen] = useState(false);
   const isOwner = user?.uid === book.ownerId && book.status === 'available';
@@ -17,7 +16,7 @@ const QrExchangeGenerator = ({ book, user }) => {
     <div>
       <button 
         onClick={() => setOpen(true)} 
-        className="btn-primary text-sm py-2 px-4 rounded-lg whitespace-nowrap transition-smooth hover:scale-105 active:scale-95"
+        className="btn-primary text-sm py-2 px-4 rounded-lg whitespace-nowrap hover:scale-105 active:scale-95 transition-transform"
       >
         🔐 Generate QR
       </button>
@@ -27,47 +26,46 @@ const QrExchangeGenerator = ({ book, user }) => {
           onClick={() => setOpen(false)}
         >
           <div
-            className="glass-card max-w-sm w-full p-8 rounded-2xl animate-scale-in text-slate-900"
+            className="glass-card-lg max-w-sm w-full p-8 rounded-2xl animate-scale-in text-slate-50"
             onClick={(e) => e.stopPropagation()}
             role="dialog"
             aria-modal="true"
           >
-            <h2 className="text-2xl font-bold text-slate-900 mb-2 animate-slide-down">Exchange QR Code</h2>
-            <p className="text-slate-600 text-sm mb-6 animate-fade-in-delay-1">
-              Share this code with the other student. They'll scan it to confirm the exchange.
+            <h2 className="text-2xl font-bold text-slate-50 mb-2 animate-slide-down">Exchange QR Code</h2>
+            <p className="text-slate-300 text-sm mb-6 animate-fade-in-delay-1">
+              Share this code with the buyer. They'll scan it to confirm the exchange.
             </p>
             
             {/* QR Code Display */}
-            <div className="bg-white rounded-lg p-6 flex justify-center mb-6 border border-white/20 animate-fade-in-delay-2">
-              <QRCode value={qrValue} size={200} includeMargin fgColor="#0f172a" />
+            <div className="bg-white rounded-xl p-8 flex justify-center mb-6 border-2 border-slate-300 shadow-xl animate-fade-in-delay-2">
+              <QRCode value={qrValue} size={240} level="H" includeMargin={true} fgColor="#000000" bgColor="#FFFFFF" />
             </div>
 
             {/* Book Details */}
-            <div className="bg-indigo-500/10 border border-indigo-200 rounded-lg p-3 mb-6 animate-fade-in-delay-3 transition-smooth hover:bg-indigo-500/20 hover:border-indigo-300">
-              <p className="text-xs text-indigo-700 font-semibold mb-1">BOOK DETAILS ENCODED:</p>
-              <p className="text-xs text-indigo-600">{book.title}</p>
+            <div className="bg-indigo-500/20 border border-indigo-500/30 rounded-lg p-3 mb-6 animate-fade-in-delay-2">
+              <p className="text-xs text-indigo-300 font-semibold mb-1">ENCODED DETAILS:</p>
+              <p className="text-xs text-indigo-200">{book.title}</p>
             </div>
 
             {/* Info Message */}
-            <p className="text-xs text-slate-500 text-center mb-6 animate-fade-in-delay-3">
-              ✓ Secure • Only contains book ID • Close after exchange
+            <p className="text-xs text-slate-400 text-center mb-6 animate-fade-in-delay-3">
+              ✓ Secure • Book ID encrypted • Close after handoff
             </p>
 
             {/* Buttons */}
-            <div className="flex gap-3 animate-fade-in-delay-4">
+            <div className="flex gap-3 animate-fade-in-delay-3">
               <button 
                 onClick={() => setOpen(false)} 
-                className="flex-1 btn-secondary py-2 rounded-lg transition-smooth hover:scale-105 active:scale-95"
+                className="flex-1 btn-secondary py-2 rounded-lg hover:scale-105 active:scale-95 transition-transform text-sm"
               >
                 Close
               </button>
               <button 
                 onClick={() => {
-                  // Copy to clipboard
                   navigator.clipboard.writeText(qrValue);
                   alert('QR data copied!');
                 }} 
-                className="flex-1 btn-outline py-2 rounded-lg transition-smooth hover:scale-105 active:scale-95"
+                className="flex-1 btn-outline py-2 rounded-lg hover:scale-105 active:scale-95 transition-transform text-sm"
               >
                 Copy
               </button>

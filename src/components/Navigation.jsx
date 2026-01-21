@@ -14,29 +14,29 @@ const Navigation = ({ user }) => {
 
   const isActive = (path) => (path === '/' ? pathname === '/' : pathname.startsWith(path));
 
-  const linkBase = 'relative text-sm font-semibold px-3 py-2 rounded-full transition duration-150 focus-visible:ring-2 focus-visible:ring-indigo-400 focus:outline-none border';
-  const activeClasses = 'text-indigo-700 bg-indigo-50 shadow-md border-indigo-100';
-  const inactiveClasses = 'text-slate-600 border-transparent hover:text-indigo-600 hover:bg-white/80';
+  const linkBase = 'relative text-sm font-semibold px-3 py-2 rounded-lg transition duration-200 focus-visible:ring-2 focus-visible:ring-indigo-500/50 focus:outline-none';
+  const activeClasses = 'text-indigo-400 bg-indigo-500/20 border border-indigo-500/30';
+  const inactiveClasses = 'text-slate-300 border border-transparent hover:text-slate-50 hover:bg-white/5 hover:border-white/10';
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-white/70 shadow-[0_10px_40px_rgba(15,23,42,0.08)] animate-slide-down">
+    <nav className="sticky top-0 z-50 bg-slate-900/40 backdrop-blur-xl border-b border-white/8 shadow-xl animate-slide-down">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Brand */}
-        <Link to="/" className="flex items-center gap-3 flex-shrink-0 hover:opacity-90 transition-smooth group">
-          <div className="w-9 h-9 bg-gradient-to-r from-indigo-500 to-sky-400 rounded-lg flex items-center justify-center text-white font-bold text-lg group-hover:scale-110 transition-transform">
+        {/* Brand Logo */}
+        <Link to="/" className="flex items-center gap-3 flex-shrink-0 hover:opacity-80 transition-opacity group">
+          <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-lg flex items-center justify-center text-slate-50 font-bold text-lg group-hover:scale-110 transition-transform shadow-lg">
             BM
           </div>
           <div>
-            <div className="font-bold text-slate-900 text-lg tracking-tight">BOOK MARKET</div>
-            <div className="text-xs text-slate-500 inline-flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Live campus exchange</span>
+            <div className="font-bold text-slate-50 text-lg tracking-tight">BOOK MARKET</div>
+            <div className="text-xs text-slate-400 inline-flex items-center gap-1.5">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span>Live Exchange</span>
             </div>
           </div>
         </Link>
 
-        {/* Nav Links */}
-        <div className="hidden md:flex items-center gap-4 flex-1 ml-12">
+        {/* Navigation Links */}
+        <div className="hidden md:flex items-center gap-2 flex-1 ml-12">
           {navLinks.map((link) => {
             const active = isActive(link.to);
             return (
@@ -46,12 +46,10 @@ const Navigation = ({ user }) => {
                 className={`${linkBase} ${active ? activeClasses : inactiveClasses}`}
                 aria-current={active ? 'page' : undefined}
               >
-                <span className="relative">
-                  {link.label}
-                  {active && (
-                    <span className="absolute -bottom-2 left-1/2 h-1 w-10 -translate-x-1/2 rounded-full bg-gradient-to-r from-indigo-400 to-sky-300 shadow-[0_8px_20px_rgba(99,102,241,0.35)]" />
-                  )}
-                </span>
+                {link.label}
+                {active && (
+                  <span className="absolute -bottom-1 left-1/2 h-1 w-6 -translate-x-1/2 rounded-full bg-gradient-to-r from-indigo-400 to-emerald-400 shadow-lg"></span>
+                )}
               </Link>
             );
           })}
@@ -59,15 +57,27 @@ const Navigation = ({ user }) => {
 
         {/* User Section */}
         <div className="flex items-center gap-4 ml-auto animate-fade-in-delay-1">
-          <Link to="/impact" className="text-right hidden sm:block glass-card px-3 py-2 rounded-lg hover-glow transition-smooth">
-            <div className="text-xs text-indigo-500 font-semibold">Impact Score</div>
-            <div className="text-sm font-bold text-emerald-500">View</div>
+          {/* Impact Badge */}
+          <Link to="/impact" className="hidden sm:flex items-center gap-2 glass-card px-4 py-2 rounded-lg hover:border-indigo-500/50 transition-all">
+            <div>
+              <div className="text-xs text-indigo-400 font-semibold">Impact</div>
+              <div className="text-xs font-bold text-emerald-400">View →</div>
+            </div>
           </Link>
+
+          {/* User Info */}
           <div className="text-right hidden sm:block">
-            <div className="text-sm font-medium text-slate-900">{user?.displayName}</div>
-            <div className="text-xs text-slate-500">{user?.email}</div>
+            <div className="text-sm font-medium text-slate-50">{user?.displayName}</div>
+            <div className="text-xs text-slate-400">{user?.email}</div>
           </div>
-          <button onClick={signOutUser} className="btn-outline text-sm transition-smooth hover:scale-105 active:scale-95">Sign out</button>
+
+          {/* Sign Out Button */}
+          <button 
+            onClick={signOutUser} 
+            className="btn-outline text-sm hover:scale-105 active:scale-95 transition-transform"
+          >
+            Sign out
+          </button>
         </div>
       </div>
     </nav>
